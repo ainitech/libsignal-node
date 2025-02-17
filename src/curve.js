@@ -112,7 +112,7 @@ exports.calculateAgreement = function(pubKey, privKey) {
 exports.calculateSignature = async function (privKey, message) {
     await ensureModuleLoaded();
 
-    if (!curveJsInstance._curve25519_sign) {
+    if (!curveJs._curve25519_sign) {
         throw new Error("❌ Função _curve25519_sign não encontrada no módulo curve25519.js");
     }
 
