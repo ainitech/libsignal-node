@@ -116,6 +116,13 @@ exports.calculateSignature = async function (privKey, message) {
         throw new Error("❌ Função _curve25519_sign não encontrada no módulo curve25519.js");
     }
 
+    if (!privKey) {
+        throw new Error("❌ Erro: `privKey` está indefinido em calculateSignature.");
+    }
+    if (!message) {
+        throw new Error("❌ Erro: `message` está indefinido em calculateSignature.");
+    }
+
     // Chamada da função diretamente
     return Buffer.from(curveJs._curve25519_sign(privKey, message));
 };
