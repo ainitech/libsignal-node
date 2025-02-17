@@ -120,7 +120,14 @@ exports.calculateSignature = async function (privKey, message) {
     return Buffer.from(curveJsInstance._curve25519_sign(privKey, message));
 };
 
-exports.verifySignature = function(pubKey, msg, sig) {
+
+exports.verifySignature = async function (pubKey, msg, sig) {
+    await ensureModuleLoaded(); // Garante que curve25519.js está carregado
+
+    if (!curveJs._curve25519_verify) {
+        throw new Error("❌ Função _curve25519_verify não encontrada no módulo curve25519.js");
+    }
+
     pubKey = scrubPubKeyFormat(pubKey);
     if (!pubKey || pubKey.byteLength != 32) {
         throw new Error("Invalid public key");
@@ -131,5 +138,8 @@ exports.verifySignature = function(pubKey, msg, sig) {
     if (!sig || sig.byteLength != 64) {
         throw new Error("Invalid signature");
     }
-    return curveJs.verify(pubKey, msg, sig);
+
+    return curveJs._curve25519_verify(pubKey, msg, sig);
 };
+
+
