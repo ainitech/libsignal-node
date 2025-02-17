@@ -1,9 +1,20 @@
-
 const curveJs = require('../build/curve25519.js');
 const nodeCrypto = require('crypto');
 // from: https://github.com/digitalbazaar/x25519-key-agreement-key-2019/blob/master/lib/crypto.js
 
 console.log("✅ Módulo curve25519.js carregado:", Object.keys(curveJs));
+
+
+// Função para aguardar o carregamento do módulo
+async function ensureModuleLoaded() {
+    while (!curveJs) {
+        console.log("⏳ Aguardando curve25519.js carregar...");
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+}
+
+
+
 
 const PUBLIC_KEY_DER_PREFIX = Buffer.from([
     48, 42, 48, 5, 6, 3, 43, 101, 110, 3, 33, 0
