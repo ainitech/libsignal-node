@@ -117,7 +117,7 @@ exports.calculateSignature = async function (privKey, message) {
     }
 
     // Chamada da função diretamente
-    return Buffer.from(curveJsInstance._curve25519_sign(privKey, message));
+    return Buffer.from(curveJs._curve25519_sign(privKey, message));
 };
 
 
