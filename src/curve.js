@@ -2,6 +2,9 @@
 const curveJs = require('../build/curve25519.js');
 const nodeCrypto = require('crypto');
 // from: https://github.com/digitalbazaar/x25519-key-agreement-key-2019/blob/master/lib/crypto.js
+
+console.log("✅ Módulo curve25519.js carregado:", Object.keys(curveJs));
+
 const PUBLIC_KEY_DER_PREFIX = Buffer.from([
     48, 42, 48, 5, 6, 3, 43, 101, 110, 3, 33, 0
 ]);
@@ -95,12 +98,15 @@ exports.calculateAgreement = function(pubKey, privKey) {
     }
 };
 
-exports.calculateSignature = function(privKey, message) {
-    validatePrivKey(privKey);
-    if (!message) {
-        throw new Error("Invalid message");
+exports.calculateSignature = async function (privKey, message) {
+    await ensureModuleLoaded();
+
+    if (!curveJsInstance._curve25519_sign) {
+        throw new Error("❌ Função _curve25519_sign não encontrada no módulo curve25519.js");
     }
-    return Buffer.from(curveJs.sign(privKey, message));
+
+    // Chamada da função diretamente
+    return Buffer.from(curveJsInstance._curve25519_sign(privKey, message));
 };
 
 exports.verifySignature = function(pubKey, msg, sig) {
